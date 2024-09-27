@@ -15,6 +15,7 @@ from app.shared.logging import InterceptHandler
 class Config(BaseSettings):
 
     ### GENERAL ###
+    BUILD_ENV: str = None
     DEV: bool = True
     API_V1_STR: str = "/api/v1"
     INVITE_LINK_URL: str = "sotw/invite/"
@@ -80,6 +81,7 @@ class Config(BaseSettings):
     DB_PASSWORD: str = "password"
     DB_NAME: str = "sotw"
     DB_PORT: int = 5432
+    DB_CA_PATH: str = "~/.postgresql/root.crt"
     # AWS_ACCESS_KEY_ID: str = "DUMMYIDEXAMPLE"
     # AWS_SECRET_ACCESS_KEY: str = "DUMMYEXAMPLEKEY"
     # AWS_REGION: str = "us-east-1"

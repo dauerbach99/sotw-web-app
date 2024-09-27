@@ -19,16 +19,20 @@ user = os.environ['DB_USER']
 password = os.environ['DB_PASSWORD']
 host = os.environ['DB_HOST']
 port = os.environ['DB_PORT']
+env = os.environ['BUILD_ENV']
 
 try:
-    psycopg2.connect(
-        dbname=dbname,
-        user=user,
-        password=password,
-        host=host,
-        port=port
-    )
-except psycopg2.OperationalError:
+    if env == 'prod':
+        psycopg2.connect(f"postgresql://{user}:{password}@{host}:{port}/{dbname}?sslmode=verify-full")
+    else:
+        psycopg2.connect(
+            dbname=dbname,
+            user=user,
+            password=password,
+            host=host,
+            port=port
+        )
+except psycopg2.OperationalError as e:
     sys.exit(-1)
 sys.exit(0)
 

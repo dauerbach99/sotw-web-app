@@ -5,7 +5,7 @@ DB_NAME := sotw
 DB_TEST_NAME := sotw_test
 DB_DEV_USER := clarice
 DB_DEV_PASS := clarice
-
+ENV := dev
 
 # docker-compose automation
 docker-up:
@@ -16,14 +16,16 @@ docker-down:
 
 docker-build: docker-build-nginx docker-build-backend docker-build-frontend
 
-docker-build-prod: docker-build-prod-nginx docker-build-backend docker-build-frontend
+docker-build-prod: 
+	ENV := prod
+	docker-build-prod-nginx docker-build-backend docker-build-frontend
 
 # docker-build-backend:
 # 	. venv/bin/activate && ./venv/bin/pip freeze > ./app/requirements.txt
 # 	cd app && docker build --no-cache -t sotw-api .
 docker-build-backend:
 	cp alembic.ini app/
-	cd app && docker build --no-cache -t sotw-api .
+	cd app && docker build --no-cache --build-arg BUILD_ENV=$(ENV) -t sotw-api .
 	rm app/alembic.ini
 
 docker-build-nginx:

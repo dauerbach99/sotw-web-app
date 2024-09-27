@@ -14,6 +14,7 @@ engine_url = URL.create(
     host=cfg.DB_HOST,
     port=cfg.DB_PORT,
     database=cfg.DB_NAME,
+    query={'sslmode': f"{'disable' if cfg.BUILD_ENV == 'dev' else 'verify-full'}"},
 )
 engine = create_engine(engine_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -26,6 +27,7 @@ engine_async_url = URL.create(
     host=cfg.DB_HOST,
     port=cfg.DB_PORT,
     database=cfg.DB_NAME,
+    query={'sslmode': 'verify-full'},
 )
 async_engine = create_async_engine(engine_async_url)
 AsyncSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=async_engine)

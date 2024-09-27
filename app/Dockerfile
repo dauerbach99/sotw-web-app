@@ -1,5 +1,7 @@
 FROM python:3.10.7-slim
 
+ARG BUILD_ENV
+ENV BUILD_ENV=${BUILD_ENV}
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
@@ -13,6 +15,7 @@ RUN apt-get update && apt-get install -y \
   netcat \
   gcc \
   make \
+  curl \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*s
 
@@ -33,6 +36,8 @@ COPY ./alembic.ini /alembic.ini
 WORKDIR /usr/src/app
 
 ENV PYTHONPATH="${PYTHONPATH}:/usr/src/app/"
+# get the db cert
+RUN curl --create-dirs -o /root/.postgresql/root.crt 'https://cockroachlabs.cloud/clusters/1b005576-5c9b-4d4f-8951-79e577b46d13/cert'
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements.txt ./requirements.txt
